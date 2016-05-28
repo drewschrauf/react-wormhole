@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Wormhole extends Component {
+class WormholeConnector extends Component {
   static propTypes = {
     children: React.PropTypes.node,
     transformContext: React.PropTypes.func,
@@ -19,10 +19,11 @@ class Wormhole extends Component {
   }
 }
 
+// wormholeConnect
 export default transformFn => (
   Comp => (
     props => (
-      <Wormhole transformContext={transformFn}><Comp {...props} /></Wormhole>
+      <WormholeConnector transformContext={transformFn}><Comp {...props} /></WormholeConnector>
     )
   )
 );
