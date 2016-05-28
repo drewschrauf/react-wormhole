@@ -2,10 +2,10 @@
   "name": "react-wormhole",
   "version": "0.0.1",
   "description": "A context helper for React",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "babel -d lib src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r jsdom-global/register --compilers js:babel-register --recursive test"
   },
   "keywords": [
     "react",
