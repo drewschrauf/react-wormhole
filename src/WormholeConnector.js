@@ -26,6 +26,10 @@ class WormholeConnector extends Component {
     this.context.wormhole.pubsub.subscribe(this.state.updater);
   }
 
+  componentWillUnmount() {
+    this.context.wormhole.pubsub.unsubscribe(this.state.updater);
+  }
+
   render() {
     const { children, transformContext } = this.props;
     const { props } = this.state;

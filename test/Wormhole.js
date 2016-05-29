@@ -72,6 +72,21 @@ describe('Wormhole', () => {
     root.setProps({ test: 'change' });
     expect(root.find('ChildComp')).to.have.prop('test', 'change');
   });
-  it('should subscribe to changes on mount');
-  it('should unsubscribe from changes on unmount');
+
+  // not actually testing at the moment, just executing code
+  it('should unsubscribe from changes on unmount', () => {
+    const ConnectedChild = wormholeConnect()(ChildComp);
+    const ConditionalComp = props => (
+      <Wormhole test="test">
+        {props.render && <ConnectedChild />}
+      </Wormhole>
+    );
+    ConditionalComp.propTypes = {
+      render: React.PropTypes.bool,
+    };
+    const root = mount(
+      <ConditionalComp render />
+    );
+    root.setProps({ render: false });
+  });
 });
