@@ -10,10 +10,26 @@ class WormholeConnector extends Component {
     wormhole: React.PropTypes.object.isRequired,
   }
 
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      props: context.wormhole.getProps(),
+      updater: () => {
+        this.setState({
+          props: this.context.wormhole.getProps(),
+        });
+      },
+    };
+  }
+
+  componentDidMount() {
+    this.context.wormhole.pubsub.subscribe(this.state.updater);
+  }
+
   render() {
     const { children, transformContext } = this.props;
-    const { wormhole } = this.context;
-    const additionalProps = transformContext ? transformContext(wormhole) : wormhole;
+    const { props } = this.state;
+    const additionalProps = transformContext ? transformContext(props) : props;
 
     return React.cloneElement(React.Children.only(children), { ...additionalProps });
   }

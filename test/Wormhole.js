@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import { mount } from 'enzyme';
-import React from 'react';
+import React, { Component } from 'react';
 chai.use(chaiEnzyme());
 
 import Wormhole, { wormholeConnect } from '../src';
@@ -9,6 +9,20 @@ import Wormhole, { wormholeConnect } from '../src';
 const ChildComp = () => (
   <div />
 );
+
+class PureComp extends Component {
+  static propTypes = {
+    children: React.PropTypes.node,
+  }
+
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
 
 describe('Wormhole', () => {
   it('should pass through props from context', () => {
@@ -45,7 +59,19 @@ describe('Wormhole', () => {
     expect(child).to.have.prop('another', 'another');
   });
 
-  it('should rerender on context change');
+  it('should rerender on context change', () => {
+    const ConnectedChild = wormholeConnect()(ChildComp);
+    const root = mount(
+      <Wormhole test="test">
+        <PureComp>
+          <ConnectedChild />
+        </PureComp>
+      </Wormhole>
+    );
+    expect(root.find('ChildComp')).to.have.prop('test', 'test');
+    root.setProps({ test: 'change' });
+    expect(root.find('ChildComp')).to.have.prop('test', 'change');
+  });
   it('should subscribe to changes on mount');
   it('should unsubscribe from changes on unmount');
 });
